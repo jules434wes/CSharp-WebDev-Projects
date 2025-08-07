@@ -1,0 +1,162 @@
+﻿################################################################################
+# 這個 .gitignore 檔案由 Microsoft(R) Visual Studio 自動建立。
+################################################################################
+
+# .NET Core 編譯結果
+bin/
+obj/
+out/
+
+# Visual Studio 快取/設定檔案
+.vs/
+.vscode/
+*.user
+*.userosscache
+*.sln.docstates
+
+# 建置結果
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# NuGet 套件
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# MSTest 測試結果
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.VisualState.xml
+TestResult.xml
+nunit-*.xml
+
+# Coverage 報告
+*.coverage
+*.coveragexml
+coverage*.info
+coverage*.json
+coverage*.xml
+
+# .NET Core 專案檔案
+.dotnet/
+
+# StyleCop
+StyleCopReport.xml
+
+# 資料庫檔案 (如果使用 LocalDB)
+*.mdf
+*.ldf
+*.ndf
+
+# Rider IDE
+.idea/
+*.sln.iml
+
+# User-specific files (MonoDevelop/Xamarin Studio)
+*.userprefs
+
+# Mono auto generated files
+mono_crash.*
+
+# Mac 系統檔案
+.DS_Store
+
+# Windows 系統檔案
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# 自動產生的檔案
+*.dbmdl
+*.jfm
+
+# Publish profiles
+*.pubxml
+*.publishproj
+
+# Web publish 結果
+*.[Pp]ublish.xml
+*.azurePubxml
+
+# Azure Web App publish settings
+*.PublishSettings
+
+# 日誌檔案
+*.log
+
+# SQL Server 檔案 (如果使用)
+*.mdf
+*.ldf
+
+# 暫時檔案
+*.tmp
+*.temp
+
+# Entity Framework 遷移備份檔案
+*.edmx.sql
+*.edmx.diagram
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+# TeamCity
+_TeamCity*
+
+# DotCover
+*.dotCover
+
+# NCrunch
+_NCrunch_*
+.*crunch*.local.xml
+nCrunchTemp_*
+
+# MightyMoose
+*.mm.*
+AutoTest.Net/
+
+# Web 暫時檔案
+node_modules/
+wwwroot/lib/
+
+# VS Code
+.vscode/
+
+# JetBrains Rider
+.idea/
+
+# MacOS
+.DS_Store
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Application settings (可能包含敏感資料)
+appsettings.Production.json
+appsettings.Staging.json
+appsettings.Local.json
+appsettings.Personal.json
+
+
+# Secrets (絕對不要提交！)
+secrets.json
+.env
+*.key
+*.pem
+*.secrets.json
+.env.local
