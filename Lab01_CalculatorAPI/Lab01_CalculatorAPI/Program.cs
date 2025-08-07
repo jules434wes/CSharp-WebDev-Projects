@@ -20,11 +20,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// 重要：支援靜態檔案（讓 HTML 可以被訪問）
-app.UseStaticFiles();
-
+// ⭐ 重要：正確的順序！
 // 設定預設檔案（訪問根目錄時自動開啟 index.html）
-app.UseDefaultFiles();
+app.UseDefaultFiles();    // 1. 先設定預設檔案（index.html）
+
+// 重要：支援靜態檔案（讓 HTML 可以被訪問）
+app.UseStaticFiles();     // 2. 後設定靜態檔案支援
+
 
 
 app.UseHttpsRedirection();
