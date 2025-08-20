@@ -19,7 +19,11 @@
                             <i class="fas fa-brain"></i> 1A2B 猜數字遊戲
                         </h1>
                         <p class="lead text-muted">猜測 4 位數字，A=位置對數字對，B=位置錯數字對</p>
-                        <!--<p>注意：數字可以重複</p>-->
+                        <!-- 🎯 修改：更新提示 -->
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <strong>注意：數字不可重複！</strong>
+                        </div>
                     </div>
 
                     <!-- 遊戲規則 -->
@@ -29,7 +33,8 @@
                             <li><strong>A</strong>：位置對且數字對</li>
                             <li><strong>B</strong>：位置錯但數字存在於答案中</li>
                             <li>例如：答案 1234，猜測 1325 → 結果 1A2B</li>
-                            <li>注意：數字可以重複</li>
+                            <!-- 🎯 修改：更新規則說明 -->
+                            <li><strong>重要：數字不可重複！</strong> 例如：1123 是無效輸入</li>
                         </ul>
                     </div>
 
@@ -56,9 +61,17 @@
                     <!-- 輸入區域 -->
                     <div class="row mb-4">
                         <div class="col-md-8">
-                            <label for="guessInput" class="form-label h5">輸入你的猜測 (4位數字)：</label>
+                            <!-- 🎯 修改：更新標籤說明 -->
+                            <label for="guessInput" class="form-label h5">
+                                輸入你的猜測 (4位不重複數字)：
+                            </label>
                             <input type="text" id="guessInput" class="form-control number-input"
-                                   maxlength="4" placeholder="0000" disabled>
+                                   maxlength="4" placeholder="1234" disabled>
+                            <!-- 🎯 新增：輸入提示 -->
+                            <div class="form-text">
+                                <i class="fas fa-lightbulb"></i>
+                                提示：每個數字只能使用一次，例如 1234 或 5690
+                            </div>
                         </div>
                         <div class="col-md-4 d-flex align-items-end">
                             <button id="submitGuess" class="btn btn-primary btn-lg w-100" disabled>

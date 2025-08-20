@@ -22,11 +22,87 @@ function setupEventListeners() {
         }
     });
 
-    // 限制只能輸入數字
+    // 🎯 修改：限制只能輸入數字，且即時檢查重複
     document.getElementById('guessInput').addEventListener('input', function (e) {
+        // 只保留數字
         e.target.value = e.target.value.replace(/[^0-9]/g, '');
+
+        // 🎯 新增：檢查並移除重複數字
+        e.target.value = removeDuplicateDigits(e.target.value);
+
         updateSubmitButton();
+        validateInput(); // 🎯 新增：即時驗證
     });
+}
+
+// 🎯 新增：移除重複數字的函數
+function removeDuplicateDigits(input) {
+    let result = '';
+    let seenDigits = new Set();
+
+    for (let char of input) {
+        if (!seenDigits.has(char)) {
+            seenDigits.add(char);
+            result += char;
+        }
+    }
+
+    return result;
+}
+
+// 🎯 新增：即時輸入驗證
+function validateInput() {
+    const input = document.getElementById('guessInput');
+    const guess = input.value;
+
+    // 清除之前的提示
+    clearValidationMessage();
+
+    if (guess.length > 0) {
+        if (hasDuplicateDigits(guess)) {
+            showValidationMessage('數字不可重複！', 'warning');
+            input.classList.add('is-invalid');
+        } else {
+            input.classList.remove('is-invalid');
+            if (guess.length === 4) {
+                showValidationMessage('輸入正確！', 'success');
+            }
+        }
+    }
+}
+
+// 🎯 新增：檢查是否有重複數字
+function hasDuplicateDigits(str) {
+    const digits = str.split('');
+    const uniqueDigits = [...new Set(digits)];
+    return digits.length !== uniqueDigits.length;
+}
+
+// 🎯 新增：顯示輸入驗證訊息
+function showValidationMessage(message, type) {
+    const inputGroup = document.getElementById('guessInput').parentElement;
+    const existingMsg = inputGroup.querySelector('.validation-message');
+
+    if (existingMsg) {
+        existingMsg.remove();
+    }
+
+    const alertClass = type === 'success' ? 'text-success' : 'text-warning';
+    const icon = type === 'success' ? 'check-circle' : 'exclamation-triangle';
+
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `validation-message mt-1 ${alertClass}`;
+    msgDiv.innerHTML = `<i class="fas fa-${icon}"></i> <small>${message}</small>`;
+
+    inputGroup.appendChild(msgDiv);
+}
+
+// 🎯 新增：清除驗證訊息
+function clearValidationMessage() {
+    const existingMsg = document.querySelector('.validation-message');
+    if (existingMsg) {
+        existingMsg.remove();
+    }
 }
 
 // 開始新遊戲
@@ -56,8 +132,11 @@ async function startNewGame() {
             document.getElementById('attemptCount').textContent = '0';
             document.getElementById('guessInput').disabled = false;
             document.getElementById('guessInput').value = '';
+            document.getElementById('guessInput').classList.remove('is-invalid');
             document.getElementById('guessInput').focus();
             document.getElementById('historyCard').style.display = 'none';
+
+            clearValidationMessage(); // 🎯 新增：清除驗證訊息
 
             updateSubmitButton();
             showResult(result.message, 'success');
@@ -75,8 +154,15 @@ async function startNewGame() {
 async function submitGuess() {
     const guess = document.getElementById('guessInput').value;
 
+    // 🎯 修改：加強輸入驗證
     if (guess.length !== 4) {
         showResult('請輸入完整的 4 位數字！', 'warning');
+        return;
+    }
+
+    // 🎯 新增：檢查重複數字
+    if (hasDuplicateDigits(guess)) {
+        showResult('數字不可重複，請重新輸入！', 'warning');
         return;
     }
 
@@ -125,7 +211,12 @@ async function submitGuess() {
 
             // 清空輸入框
             document.getElementById('guessInput').value = '';
-            document.getElementById('guessInput').focus();
+            document.getElementById('guessInput').classList.remove('is-invalid');
+            clearValidationMessage(); // 🎯 新增：清除驗證訊息
+
+            if (!result.isWin) {
+                document.getElementById('guessInput').focus();
+            }
 
         } else {
             showResult(result.errorMessage, 'error');
@@ -137,11 +228,15 @@ async function submitGuess() {
     }
 }
 
-// 更新提交按鈕狀態
+// 🎯 修改：更新提交按鈕狀態（加入重複檢查）
 function updateSubmitButton() {
     const guess = document.getElementById('guessInput').value;
     const submitBtn = document.getElementById('submitGuess');
-    const isValid = guess.length === 4 && currentGameId !== null;
+
+    // 按鈕啟用條件：長度為4、有遊戲ID、無重複數字
+    const isValid = guess.length === 4 &&
+        currentGameId !== null &&
+        !hasDuplicateDigits(guess);
 
     submitBtn.disabled = !isValid;
 }
@@ -192,6 +287,7 @@ function showWinMessage(message) {
 function disableGame() {
     document.getElementById('guessInput').disabled = true;
     document.getElementById('submitGuess').disabled = true;
+    clearValidationMessage(); // 🎯 新增：清除驗證訊息
 }
 
 // 更新歷史記錄顯示

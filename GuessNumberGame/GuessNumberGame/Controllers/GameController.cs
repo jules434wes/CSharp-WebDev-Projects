@@ -22,13 +22,8 @@ namespace GuessNumberGame.Controllers
                 // 產生新的遊戲 ID
                 int gameId = _nextGameId++;
 
-                // 產生 4 位隨機數字（可重複）
-                Random random = new Random();
-                string answer = "";
-                for (int i = 0; i < 4; i++)
-                {
-                    answer += random.Next(0, 10).ToString();
-                }
+                // 🎯 修改：產生 4 位不重複數字
+                string answer = GenerateUniqueDigits();
 
                 // 建立新的遊戲狀態
                 var gameState = new GameState
@@ -43,12 +38,12 @@ namespace GuessNumberGame.Controllers
                 _games[gameId] = gameState;
 
                 // 🔧 開發時可以顯示答案，正式上線時要移除
-                Console.WriteLine($"新遊戲開始！遊戲 ID: {gameId}, 答案: {answer}");
+                Console.WriteLine($"新遊戲開始！遊戲 ID: {gameId}, 答案: {answer} (數字不重複)");
 
                 return Ok(new NewGameResponse
                 {
                     GameId = gameId,
-                    Message = "新遊戲開始！請猜測 4 位數字",
+                    Message = "新遊戲開始！請猜測 4 位不重複數字",
                     Success = true
                 });
             }
@@ -60,6 +55,29 @@ namespace GuessNumberGame.Controllers
                     Message = "開始新遊戲失敗：" + ex.Message
                 });
             }
+        }
+
+        // 🎯 新增：產生不重複數字的方法
+        private string GenerateUniqueDigits()
+        {
+            Random random = new Random();
+            List<int> availableDigits = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            string answer = "";
+
+            for (int i = 0; i < 4; i++)
+            {
+                // 隨機選擇一個可用的數字
+                int randomIndex = random.Next(availableDigits.Count);
+                int selectedDigit = availableDigits[randomIndex];
+
+                // 將選中的數字加入答案
+                answer += selectedDigit.ToString();
+
+                // 從可用數字清單中移除已使用的數字
+                availableDigits.RemoveAt(randomIndex);
+            }
+
+            return answer;
         }
 
         // POST: api/Game/guess
@@ -81,12 +99,21 @@ namespace GuessNumberGame.Controllers
 
                 // 檢查是否為 4 位數字
                 if (!Regex.IsMatch(request.Guess, @"^\d{4}$"))
-                //Regex.IsMatch(...)：這是 C# 的正則表達式方法，用來判斷字串是否符合指定的模式
                 {
                     return BadRequest(new GuessResponse
                     {
                         Success = false,
                         ErrorMessage = "請輸入正確的 4 位數字"
+                    });
+                }
+
+                // 🎯 新增：檢查數字是否重複
+                if (HasDuplicateDigits(request.Guess))
+                {
+                    return BadRequest(new GuessResponse
+                    {
+                        Success = false,
+                        ErrorMessage = "數字不可重複，請重新輸入"
                     });
                 }
 
@@ -153,6 +180,23 @@ namespace GuessNumberGame.Controllers
                     ErrorMessage = "處理猜測失敗：" + ex.Message
                 });
             }
+        }
+
+        // 🎯 新增：檢查是否有重複數字的方法
+        private bool HasDuplicateDigits(string input)
+        {
+            HashSet<char> seenDigits = new HashSet<char>();
+
+            foreach (char digit in input)
+            {
+                if (seenDigits.Contains(digit))
+                {
+                    return true; // 發現重複數字
+                }
+                seenDigits.Add(digit);
+            }
+
+            return false; // 沒有重複數字
         }
 
         // GET: api/Game/{gameId}/history
