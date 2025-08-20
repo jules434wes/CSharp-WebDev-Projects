@@ -1,0 +1,55 @@
+﻿body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+.game-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    margin-top: 2rem;
+    padding: 2rem;
+}
+
+.number-input {
+    font-size: 2rem;
+    text-align: center;
+    letter-spacing: 0.5rem;
+    font-family: 'Courier New', monospace;
+    border: 3px solid #007bff;
+    border-radius: 10px;
+}
+
+.history-item {
+    font-family: 'Courier New', monospace;
+    font-size: 1.1rem;
+}
+
+.result-display {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 1rem;
+    border-radius: 10px;
+    margin: 1rem 0;
+}
+
+.win-message {
+    background: linear-gradient(45deg, #ff6b6b, #feca57);
+    color: white;
+    animation: celebration 0.5s ease-in-out;
+}
+
+@keyframes celebration {
+    0% {
+        transform: scale(0.8);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
